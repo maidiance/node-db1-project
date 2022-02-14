@@ -1,4 +1,3 @@
-const Accounts = require('./accounts-model');
 const db = require('../../data/db-config');
 
 exports.checkAccountPayload = (req, res, next) => {
@@ -21,10 +20,8 @@ exports.checkAccountPayload = (req, res, next) => {
 }
 
 exports.checkAccountNameUnique = async (req, res, next) => {
-  const nameToMatch = new Object();
-  nameToMatch.name = req.body.name.trim();
-  const matches = await db('accounts').where(nameToMatch);
-  console.log(matches);
+  const toMatch = req.body.trim();
+  const matches = await db('accounts').where({name: toMatch});
   if (matches.length >= 1){
     res.status(400).json({message: 'that name is taken'});
   } else {
@@ -33,10 +30,11 @@ exports.checkAccountNameUnique = async (req, res, next) => {
 }
 
 exports.checkAccountId = async (req, res, next) => {
-  let account = await Accounts.getById(req.params);
-    if(account == null || account.length < 1){
-      res.status(404).json({message: 'account not found'});
-    } else {
-      next();
-    }
+  const { id } = req.params;
+  const account = await db('accounts').where({id: id});
+  if (account.length < 1){
+    res.status(404).json({message: 'account not found'});
+  } else {
+    next();
+  }
 }

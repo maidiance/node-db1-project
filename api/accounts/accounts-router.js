@@ -33,7 +33,7 @@ router.post('/', checkAccountNameUnique, checkAccountPayload, (req, res, next) =
     })
 })
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id', checkAccountId, checkAccountPayload, (req, res, next) => {
   const { id } = req.params;
   Accounts.updateById(id, req.body)
     .then(account => {
@@ -44,7 +44,7 @@ router.put('/:id', (req, res, next) => {
     })
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', checkAccountId, (req, res, next) => {
   const { id } = req.params;
   Accounts.deleteById(id)
     .then(account => {
