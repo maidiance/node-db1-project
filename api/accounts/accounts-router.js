@@ -44,7 +44,14 @@ router.put('/:id', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-  // DO YOUR MAGIC
+  const { id } = req.params;
+  Accounts.deleteById(id)
+    .then(account => {
+      res.json(account);
+    })
+    .catch(() => {
+      res.status(500).json({message: 'could not delete account'});
+    })
 })
 
 router.use((err, req, res, next) => { // eslint-disable-line
