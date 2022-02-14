@@ -20,7 +20,7 @@ exports.checkAccountPayload = (req, res, next) => {
 }
 
 exports.checkAccountNameUnique = async (req, res, next) => {
-  const toMatch = req.body.trim();
+  const toMatch = req.body.name.trim();
   const matches = await db('accounts').where({name: toMatch});
   if (matches.length >= 1){
     res.status(400).json({message: 'that name is taken'});

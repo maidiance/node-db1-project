@@ -16,7 +16,7 @@ router.get('/:id', checkAccountId, (req, res, next) => {
   const { id } = req.params;
   Accounts.getById(id)
     .then(account => {
-      res.json(account);
+      res.json(account[0]);
     })
     .catch(() => {
       res.status(500).json({message: 'could not get account'});
