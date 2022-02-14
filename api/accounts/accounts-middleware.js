@@ -12,15 +12,20 @@ exports.checkAccountPayload = (req, res, next) => {
   } else if (account.budget < 0 || account.budget > 1000000) {
     res.status(400).json({message: 'budget of account is too large or too small'});
   } else {
+    req.account = {
+      ...account,
+      name: account.name.trim()
+    };
     next();
   }
 }
 
-exports.checkAccountNameUnique = (req, res, next) => {
-  const toMatch = req.body.name.trim();
-  const matches = db('accounts').where({ name: toMatch });
+exports.checkAccountNameUnique = async (req, res, next) => {
+  const nameToMatch = new Object();
+  nameToMatch.name = req.body.name.trim();
+  const matches = await db('accounts').where(nameToMatch);
   console.log(matches);
-  if (matches.length > 1){
+  if (matches.length >= 1){
     res.status(400).json({message: 'that name is taken'});
   } else {
     next();
