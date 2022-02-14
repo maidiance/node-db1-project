@@ -14,8 +14,8 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
   Accounts.getById(id)
-    .then(data => {
-      res.json(data);
+    .then(account => {
+      res.json(account);
     })
     .catch(() => {
       res.status(500).json({message: 'could not get account'});
@@ -23,11 +23,24 @@ router.get('/:id', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
-  // DO YOUR MAGIC
+  Accounts.create(req.body)
+    .then(account => {
+      res.status(201).json(account);
+    })
+    .catch(() => {
+      res.status(500).json({message: 'could not create account'});
+    })
 })
 
 router.put('/:id', (req, res, next) => {
-  // DO YOUR MAGIC
+  const { id } = req.params;
+  Accounts.updateById(id, req.body)
+    .then(account => {
+      res.status(200).json(account);
+    })
+    .catch(() => {
+      res.status(500).json({message: 'could not create account'});
+    })
 });
 
 router.delete('/:id', (req, res, next) => {
